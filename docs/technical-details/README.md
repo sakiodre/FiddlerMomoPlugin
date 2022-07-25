@@ -3,8 +3,7 @@
 Đây là chi tiết kỹ thuật về cách mà plugin này giải mã traffic.
 
 ## Momo mã hóa như thế nào?
-- Đầu tiên hãy xem qua một request đã được mã hóa
-- ![encrypted_request](../../img/encrypted_request.jpg)
+- Đầu tiên hãy xem qua một request đã được mã hóa <br> <p align="center"><img src="/../../raw/main/img/encrypted_request.jpg" width=600></p>
 - Ở phần request header ta thấy có một trường `requestkey` dưới dạng base64, đây là `aes_key` đã được mã hóa bằng **RSA** sử dụng `MOMO_PUBLIC_KEY`.
 - `MOMO_PUBLIC_KEY` là RSA Public Key được **Momo** trả về khi người dùng đăng nhập.
 - Phần request và response body được mã hóa bằng `AES-256-CBC` sử dụng `aes_key`, với iv là 16 null bytes
