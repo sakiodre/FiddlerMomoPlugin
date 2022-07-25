@@ -78,12 +78,12 @@ om3H+vISVrT+o+ihAkEAre9rCJOoAp3d/PjwbLgurq3HMt+4IYj8cjdX+GjrDgZf
     private string RSAEncryptWithMomoPublicKey(string data)
     {
         var encryptEngine = new Pkcs1Encoding(new RsaEngine());
-
         var bytesToEncrypt = Encoding.UTF8.GetBytes(data);
 
         try
         {
             encryptEngine.Init(true, momoPublicKey);
+            return Convert.ToBase64String(encryptEngine.ProcessBlock(bytesToEncrypt, 0, bytesToEncrypt.Length));
         }
         catch (Exception e)
         {
@@ -91,20 +91,17 @@ om3H+vISVrT+o+ihAkEAre9rCJOoAp3d/PjwbLgurq3HMt+4IYj8cjdX+GjrDgZf
             return null;
         }
 
-        return Convert.ToBase64String(encryptEngine.ProcessBlock(bytesToEncrypt, 0, bytesToEncrypt.Length));
     }
 
     private string RSADecryptWithInjectedPrivateKey(string base64_encrypted)
     {
-        var bytesToDecrypt = Convert.FromBase64String(base64_encrypted);
-
         var decryptEngine = new Pkcs1Encoding(new RsaEngine());
+        var bytesToDecrypt = Convert.FromBase64String(base64_encrypted);
 
         try
         {
             decryptEngine.Init(false, injectedPrivateKey);
-            var decrypted = Encoding.UTF8.GetString(decryptEngine.ProcessBlock(bytesToDecrypt, 0, bytesToDecrypt.Length));
-            return decrypted;
+            return Encoding.UTF8.GetString(decryptEngine.ProcessBlock(bytesToDecrypt, 0, bytesToDecrypt.Length));
         }
         catch (Exception e)
         {
