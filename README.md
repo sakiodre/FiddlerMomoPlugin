@@ -11,7 +11,7 @@ Một plugin cơ bản dùng cho việc giải mã traffic của app **Momo**.
 - Sau khi cài đặt thành công, nếu bạn đã đăng nhập vào **Momo**, hãy đăng xuất ra trước.
 - Sau đó tiến hành đăng nhập vào **Momo**, bây giờ plugin đã load thành công và sẵn sàng để decrypt.
 - Việc này là để thay *Momo public key* trong kết quả trả về của request login, hãy xem [Cách thức hoạt động của **FiddlerMomoPlugin**](/docs/technical-details/) để biết thêm chi tiết.
-- Khi bật tab Inspector, bạn sẽ thấy như sau: <br><img src="/img/decrypted_request.jpg" width=300>
+- Khi bật tab Inspector, bạn sẽ thấy như sau: <br><p align="center"><img src="/img/decrypted_request.jpg" width=300></p>
 - Ở phần response, do giới hạn của Fiddler nên không thể hiện dữ liệu đã được giải mã trực tiếp như phần request, thay vào đó có 2 tab được tạo ra là `TextView Decrypted` và `JSON Decrypted` dùng để xem dữ liệu đã được giải mã.
 
 ## Nâng cao
@@ -19,7 +19,7 @@ Một plugin cơ bản dùng cho việc giải mã traffic của app **Momo**.
     - `momo_debug`: mở console của plugin để xem output.
     - `momo_auth`: để lấy Authorization Token của tài khoản **Momo** hiện tại.
 - Hãy nhập vào ô ở góc dưới bên trái của **Fiddler** (phím tắt ALT+Q để focus).
-- Ảnh xem trước: <br><img src="/img/console.jpg" width=500>
+- Ảnh xem trước: <br><p align="center"><img src="/img/console.jpg" width=500></p>
 
 ## Giấy phép & Điều khoản
 - Plugin này được xuất bản dưới [Giấy Phép Công Cộng GNU GPLv3](https://vi.wikipedia.org/wiki/Gi%E1%BA%A5y_ph%C3%A9p_C%C3%B4ng_c%E1%BB%99ng_GNU)
