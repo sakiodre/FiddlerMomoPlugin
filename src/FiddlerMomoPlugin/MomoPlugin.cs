@@ -78,12 +78,12 @@ om3H+vISVrT+o+ihAkEAre9rCJOoAp3d/PjwbLgurq3HMt+4IYj8cjdX+GjrDgZf
     private string RSAEncryptWithMomoPublicKey(string data)
     {
         var encryptEngine = new Pkcs1Encoding(new RsaEngine());
+
         var bytesToEncrypt = Encoding.UTF8.GetBytes(data);
 
         try
         {
             encryptEngine.Init(true, momoPublicKey);
-            return Convert.ToBase64String(encryptEngine.ProcessBlock(bytesToEncrypt, 0, bytesToEncrypt.Length));
         }
         catch (Exception e)
         {
@@ -91,17 +91,20 @@ om3H+vISVrT+o+ihAkEAre9rCJOoAp3d/PjwbLgurq3HMt+4IYj8cjdX+GjrDgZf
             return null;
         }
 
+        return Convert.ToBase64String(encryptEngine.ProcessBlock(bytesToEncrypt, 0, bytesToEncrypt.Length));
     }
 
     private string RSADecryptWithInjectedPrivateKey(string base64_encrypted)
     {
-        var decryptEngine = new Pkcs1Encoding(new RsaEngine());
         var bytesToDecrypt = Convert.FromBase64String(base64_encrypted);
+
+        var decryptEngine = new Pkcs1Encoding(new RsaEngine());
 
         try
         {
             decryptEngine.Init(false, injectedPrivateKey);
-            return Encoding.UTF8.GetString(decryptEngine.ProcessBlock(bytesToDecrypt, 0, bytesToDecrypt.Length));
+            var decrypted = Encoding.UTF8.GetString(decryptEngine.ProcessBlock(bytesToDecrypt, 0, bytesToDecrypt.Length));
+            return decrypted;
         }
         catch (Exception e)
         {
@@ -204,7 +207,7 @@ om3H+vISVrT+o+ihAkEAre9rCJOoAp3d/PjwbLgurq3HMt+4IYj8cjdX+GjrDgZf
         oSession.oRequest["requestkey"] = RSAEncryptWithMomoPublicKey(aes_key);
 
         // put the decrypted key in the header for later usage in the response handling part
-        oSession.oRequest["requestkey_decrypted"] = aes_key;
+        oSession.oRequest["aes_key"] = aes_key;
 
         // decryption is expensive, check if we had the console opened else it is wasting resources for nothing.
         if (CConsole.isOpen)
@@ -214,7 +217,31 @@ om3H+vISVrT+o+ihAkEAre9rCJOoAp3d/PjwbLgurq3HMt+4IYj8cjdX+GjrDgZf
             CConsole.LogGray(decrypted_data);
         }
     }
-    public void AutoTamperRequestAfter(Session oSession) { }
+
+    // we handle the edit/repeat request here
+    public void AutoTamperRequestAfter(Session oSession) {
+
+        if (!oSession.url.StartsWith("api.momo.vn/") && !oSession.url.StartsWith("owa.momo.vn/")) return;
+
+        // make sure the request has gone through AutoTamperRequestBefore
+        if (oSession.oRequest["aes_key"] == "") return;
+
+        string aes_key = oSession.oRequest["aes_key"];
+
+        // if the body is not encrypted, it is probably the user is trying to send something, we should encrypt it.
+        try
+        {
+            string decrypted_data = AESDecrypt(Encoding.UTF8.GetString(oSession.RequestBody), aes_key);
+        }
+        catch (Exception e)
+        {
+
+            string request_body = Encoding.UTF8.GetString(oSession.RequestBody);
+            string encrypted_request = AESEncrypt(request_body, aes_key);
+
+            oSession.RequestBody = Encoding.UTF8.GetBytes(encrypted_request);
+        }
+    }
 
     public void AutoTamperResponseBefore(Session oSession)
     {
@@ -257,18 +284,18 @@ om3H+vISVrT+o+ihAkEAre9rCJOoAp3d/PjwbLgurq3HMt+4IYj8cjdX+GjrDgZf
         // or decrypt the request data
         else if (oSession.oRequest["requestkey"] != "")
         {
-            if (oSession.oRequest["requestkey_decrypted"] == "") return;
+            if (oSession.oRequest["aes_key"] == "") return;
 
             // uncompress the response;
             oSession.utilDecodeResponse();
 
             // decrypt the request data
             string post_data = Encoding.UTF8.GetString(oSession.RequestBody);
-            string aes_key = oSession.oRequest["requestkey_decrypted"];
+            string aes_key = oSession.oRequest["aes_key"];
             string decrypted_post_data = AESDecrypt(post_data, aes_key);
 
             oSession.RequestBody = Encoding.UTF8.GetBytes(decrypted_post_data);
-            oSession.oResponse["requestkey_decrypted"] = aes_key;
+            oSession.oResponse["aes_key"] = aes_key;
         }
     }
     public void AutoTamperResponseAfter(Session oSession) { }
@@ -330,10 +357,10 @@ public class MomoPluginCmd : IFiddlerExtension, IHandleExecAction
         set
         {
             // we have already decrypted the key when sending the request
-            if (headers["requestkey_decrypted"] != "")
+            if (value != null && value.Length > 0 && headers != null && headers["aes_key"] != "")
             {
                 string encrypted_body = Encoding.UTF8.GetString(value);
-                string decrypted_body = MomoPlugin.AESDecrypt(encrypted_body, headers["requestkey_decrypted"]);
+                string decrypted_body = MomoPlugin.AESDecrypt(encrypted_body, headers["aes_key"]);
                 jsonResponseViewer.body = Encoding.UTF8.GetBytes(decrypted_body);
             }
             else
@@ -384,10 +411,10 @@ public class MomoPluginResponseTextViewer : Inspector2, IResponseInspector2
         set
         {
             // we have already decrypted the key when sending the request
-            if (headers["requestkey_decrypted"] != "")
+            if (value != null && value.Length > 0 && headers != null && headers["aes_key"] != "")
             {
                 string encrypted_body = Encoding.UTF8.GetString(value);
-                string decrypted_body = MomoPlugin.AESDecrypt(encrypted_body, headers["requestkey_decrypted"]);
+                string decrypted_body = MomoPlugin.AESDecrypt(encrypted_body, headers["aes_key"]);
                 textResponseViewer.body = Encoding.UTF8.GetBytes(decrypted_body);
             }
             else
