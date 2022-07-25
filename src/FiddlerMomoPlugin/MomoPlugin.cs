@@ -337,6 +337,8 @@ public class MomoPluginCmd : IFiddlerExtension, IHandleExecAction
                 CConsole.LogGreen("[A] Authorization: ", false);
                 CConsole.LogWhite(MomoPlugin.authToken);
             }
+
+            return true;
         }
 
         return false;  //The command was not handled and allows other ExecAction handlers to process
