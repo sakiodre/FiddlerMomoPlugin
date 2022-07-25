@@ -2,7 +2,7 @@
 Một plugin cơ bản dùng cho việc giải mã traffic của app **Momo**.
 
 ## Cài đặt
-- Tải về plugin này [tại đây](/releases/tag/Release) và giải nén
+- Tải về plugin này [tại đây](https://github.com/thedemons/FiddlerMomoPlugin/releases/tag/Release) và giải nén
 - Xác định vị trí thư mục chứa **Fiddler**, đối với Fiddler 5 thì mặc định nằm ở `%localappdata%\Programs\Fiddler` hoặc `C:\Program Files\Fiddler`.
 - Tiến hành copy 3 file (`FiddlerMomoPlugin.dll, Newtonsoft.Json.dll, và BouncyCastle.Crypto.dll`) vào thư mục `Scripts` và `Inspectors` nằm trong thư mục chứa **Fiddler**, xin hãy lưu ý là phải copy vào cả 2 thư mục.
 
