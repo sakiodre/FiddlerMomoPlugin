@@ -9,7 +9,7 @@ Một plugin cơ bản dùng cho việc giải mã traffic của app **Momo**.
 ## Sử dụng
 - Để dùng được Fiddler với thiết bị Android, đầu tiên bạn phải làm theo [hướng dẫn này](/docs/fiddler-on-android/).
 - Sau khi cài đặt thành công, nếu bạn đã đăng nhập vào **Momo**, hãy đăng xuất ra trước.
-- Sau đó tiến hành đăng nhập vào **Momo**, bây giờ plugin dã load thành công và sẵn sàng để decrypt.
+- Sau đó tiến hành đăng nhập vào **Momo**, bây giờ plugin đã load thành công và sẵn sàng để decrypt.
 - Việc này là để thay *Momo public key* trong kết quả trả về của request login, hãy xem [Cách thức hoạt động của **FiddlerMomoPlugin**](/docs/technical-details/) để biết thêm chi tiết.
 
 ## Nâng cao
