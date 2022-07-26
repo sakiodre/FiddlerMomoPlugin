@@ -1,0 +1,7 @@
+# v1.0.1
+- Hỗ trợ edit/repeat session
+- Fix lỗi unhandled exception khi giải mã RSA
+
+# v1.0.0
+- Initial Release
+- Tự động giải mã traffic
