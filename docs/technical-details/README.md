@@ -16,7 +16,7 @@
     ```
 - Quá trình decrypt trên server:
     ```python
-    aes_key = rsa_decrypt(requestkey, MOMO_PRIVATE_KEY) # chúng ta không thể biết được private key của momo
+    aes_key = rsa_decrypt(from_base64(requestkey), MOMO_PRIVATE_KEY) # chúng ta không thể biết được private key của momo
     encrypted_request = from_base64(request_body)
     decrypted_request = aes_256_cbc_decrypt(encrypted_request, aes_key)
     ...
