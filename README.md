@@ -9,7 +9,7 @@ Một plugin cơ bản dùng cho việc giải mã traffic của app **Momo**.
 ## Sử dụng
 - Để dùng được Fiddler với thiết bị Android, đầu tiên bạn phải làm theo [hướng dẫn này](/docs/fiddler-on-android/).
 - Sau khi cài đặt thành công, nếu bạn đã đăng nhập vào **Momo**, hãy đăng xuất ra trước.
-- Sau đó tiến hành đăng nhập vào **Momo**, bây giờ plugin đã load thành công và sẵn sàng để decrypt.
+- Sau đó tiến hành đăng nhập vào **Momo**, bây giờ plugin đã load thành công và sẵn sàng để giải mã.
 - Việc này là để thay *Momo public key* trong kết quả trả về của request login, hãy xem [Cách thức hoạt động của **FiddlerMomoPlugin**](/docs/technical-details/) để biết thêm chi tiết.
 - Khi bật tab Inspector, bạn sẽ thấy như sau: <br><p align="center"><img src="/img/decrypted_request.jpg" width=300></p>
 - Ở phần response, do giới hạn của Fiddler nên không thể hiện dữ liệu đã được giải mã trực tiếp như phần request, thay vào đó có 2 tab được tạo ra là `TextView Decrypted` và `JSON Decrypted` dùng để xem dữ liệu đã được giải mã.
